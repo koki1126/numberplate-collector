@@ -15,25 +15,86 @@ class NumberPlate extends StatefulWidget {
 }
 
 //ナンバープレートのデフォルトの背景色
-Color defaultColor = const Color.fromARGB(200, 255, 255, 255);
-
+Color defaultBackgroundColor = const Color.fromARGB(0, 44, 44, 44);
 //ナンバープレートの背景色
-Color numberPlateBackgroudColor = defaultColor;
+Color backgroundColor = defaultBackgroundColor;
+
+//ナンバープレートのデフォルトの緑色部分
+Color defaultTextColor = const Color.fromARGB(50, 36, 69, 41);
+//ナンバープレートの緑色部分
+Color textColor = defaultTextColor;
 
 class _NumberPlateState extends State<NumberPlate> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: numberPlateBackgroudColor, // background
+        primary: backgroundColor,
       ),
       onPressed: () {
-        numberPlateBackgroudColor = const Color.fromARGB(255, 55, 55, 55);
-        setState(() {});
+        if (backgroundColor == defaultBackgroundColor) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                title: const Center(
+                  child: Text('見ましたか？'),
+                ),
+                children: <SimpleDialogOption>[
+                  SimpleDialogOption(
+                    onPressed: () {
+                      backgroundColor =
+                          const Color.fromARGB(200, 255, 255, 255);
+                      textColor = const Color.fromARGB(255, 36, 69, 41);
+                      setState(() {});
+                      Navigator.pop(context);
+                    },
+                    child: const Center(child: Text("はい")),
+                  ),
+                  SimpleDialogOption(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Center(child: Text("いいえ")),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       },
       onLongPress: () {
-        numberPlateBackgroudColor = defaultColor;
-        setState(() {});
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: const Center(
+                child: Text('リセットしていいですか'),
+              ),
+              children: <SimpleDialogOption>[
+                SimpleDialogOption(
+                  onPressed: () {
+                    backgroundColor = defaultBackgroundColor;
+                    textColor = defaultTextColor;
+                    setState(() {});
+                    Navigator.pop(context);
+                  },
+                  child: const Center(
+                    child: Text('はい'),
+                  ),
+                ),
+                SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Center(
+                    child: Text('いいえ'),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Container(
         height: 80,
@@ -43,10 +104,10 @@ class _NumberPlateState extends State<NumberPlate> {
           fit: BoxFit.fitWidth,
           child: Text(
             widget.name,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 36, 69, 41), //ナンバープレートの緑色部分
+              color: textColor, //ナンバープレートの緑色部分
             ),
           ),
         )),
